@@ -1,0 +1,15 @@
+[ios]
+router          ansible_host=172.16.0.20
+
+[junos]
+firewall        ansible_host=172.16.0.30
+
+[ios:vars]
+ansible_user=vagrant
+ansible_ssh_pass=vagrant
+ansible_network_os=ios
+
+[junos:vars]
+ansible_user=root
+ansible_ssh_pass=Juniper
+ansible_network_os=junos

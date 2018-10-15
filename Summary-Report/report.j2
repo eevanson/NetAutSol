@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Device Summary Report</title>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px;
+}
+</style>
+</head>
+<body>
+
+  <h1>Device Summary Report</h1>
+  <table border=1>
+    <tr>
+      <th>Hostname</th>
+      <th>Model</th>
+      <th>OS Version</th>
+      <th>Serial Number</th>
+      <th>Uptime (secs)</th>
+      <th>Interface</th>
+      <th>Description</th>
+      <th>MAC Address</th>
+      <th>IP Address</th>
+    </tr>
+{% for host in hostvars %}
+{% for interface in hostvars[host].napalm_interfaces if hostvars[host].napalm_interfaces_ip[interface] is defined and hostvars[host].napalm_interfaces[interface].mac_address != "None" %}
+{% if loop.first %}
+    <tr>
+      <td rowspan={{loop.length}}>{{hostvars[host].napalm_hostname}}</td>
+      <td rowspan={{loop.length}}>{{hostvars[host].napalm_model}}</td>
+      <td rowspan={{loop.length}}>{{hostvars[host].napalm_os_version}}</td>
+      <td rowspan={{loop.length}}>{{hostvars[host].napalm_serial_number}}</td>
+      <td rowspan={{loop.length}}>{{hostvars[host].napalm_uptime}}</td>
+{% else %}
+    <tr>
+{% endif %}
+      <td>{{interface}}</td>
+      <td>{{hostvars[host].napalm_interfaces[interface].description}}</td>
+      <td>{{hostvars[host].napalm_interfaces[interface].mac_address}}</td>
+      <td>
+{% for ip in hostvars[host].napalm_interfaces_ip[interface].ipv4 %}
+        {{ip}}/{{hostvars[host].napalm_interfaces_ip[interface].ipv4[ip].prefix_length}}<br>
+{% endfor %}
+      </td>
+    </tr>
+{% endfor %}
+{% endfor %}
+  </table>
+
+</body>
+</html>

@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
     server.vm.box = "ubuntu/trusty64"
     server.vm.network "private_network", ip: "172.16.0.10", virtualbox__intnet: true
     server.vm.hostname = "server"
+    server.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=750,fmode=640"]
     server.vm.provider "virtualbox" do |vb|
       vb.name = "Server"
     end
